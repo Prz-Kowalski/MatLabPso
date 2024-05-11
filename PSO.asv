@@ -2,16 +2,23 @@ function a = target_function(x,y)
     a = 2*x^2 + y^2 -5;
 end
 
+Rr = 1300;
+G = 8.2*10^4;
+Zgo = 0.6* Rr;
+Zso = 0.6 * Zgo;
+Zsj = 
+res = FatigueCriterium(1.0,35.0,5.0,1.0,10.0,5.0,50.0, 1000, G, )
+
 clear
 clc
 a = 200;
 b = 100;
 
 number_of_particles = 5000;
-number_of_iterations = 2000;
-inertia_coef = 1;
-cognitive_coef = 0.1;
-social_coef = 1;
+number_of_iterations = 4000;
+inertia_coef = 0.5;
+cognitive_coef = 0.5;
+social_coef = 0.1;
 
 
 swarm = zeros(number_of_particles, 7);
@@ -58,6 +65,8 @@ for i = 1 : number_of_iterations
     
     if particle_value < swarm(j,7)
         swarm(j,7) = particle_value;
+        swarm(j,5) = swarm(j,1);
+        swarm(j,6) = swarm(j,2);
     end
         %--sprawdź czy wartość funkcji dopasowania dla aktulanego położenia
     %cząstki jest lepsza niż globalna
@@ -74,4 +83,4 @@ end
 
 disp(best_global_value)
 disp(best_global_x)
-disp(best_global_x)
+disp(best_global_y)

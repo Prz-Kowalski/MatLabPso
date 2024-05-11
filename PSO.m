@@ -2,8 +2,23 @@ function a = target_function(x,y)
     a = 2*x^2 + y^2 -5;
 end
 
+
+
+
+
 clear
 clc
+
+Rr = 1300;
+G = 8.2*10^4;
+Zgo = 0.6* Rr;
+Zso = 0.6 * Zgo;
+Zsj = 1.1 * Zgo;
+tauDop = 0.5 * Rr;
+res = FatigueCriterium(1.0,35.0,5.0,1.0,10.0,5.0,50.0, 1000, G, Zso, Zsj, Rr, Zgo);
+volume = VolumeCriterium(1.0,35.0,5.0,1.0,10.0,5.0,50.0);
+
+disp(res);
 a = 200;
 b = 100;
 

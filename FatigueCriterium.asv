@@ -9,9 +9,9 @@ tauMz = k* ( 8*x2 * Pz) / (pi * power(x1,3));
 tauAz = tauMz/2;
 tauMw = k* ( 8*x5 * Pw) / (pi * power(x4,3));
 
-betaZ = 0;
+[betaZ, betaW] = calculateBeta(Rr, Zgo, x1, x2, x4, x5);
+
 gammaZ = 0;
-betaW = 0;
 gammaW = 0;
 
 termA = zSo/(betaZ * gammaZ * tauAz + tauMz * ((2*zSo/zJs) - 1));
@@ -53,16 +53,53 @@ cw = G * power(x4,4) / (8* (power(x5,3) *x6 ));
 
 end
 
-function Bz = calculateBz()
+function [Bz, Bw] = calculateBeta(Rr, Zgo, x1, x2, x4, x5)
 
+n = 5* power(10,-4) * Zgo + 0.75;
+Bps = 1.154 * power(10,-4) * Rr + 1.010;
+Bz = (1 + (n*(calculate_a(x2/x1) -1))) * Bps;
+Bw = (1 + (n*(calculate_a(x5/x4) -1))) * Bps;
 
 
 end
 
 
-function nZ = calculateNz()
+function a = calculate_a(w)
+
+a = 0.574*power(10,-4) * power(w,4) - 28.500 * power(10,-4) * power(w,3) + 520.820 + power(10,4)*power(w,2) - 0.424*w + 2.452; 
+
+end
 
 
 
+function gamma = calculateGamma(w, zGo, d)
+
+if d < 10
+    gamma = 1;
+else
+    ak = calculate_a(w);
+    gamma1 = calculateGamma1(Zgo, ak);
+    B = calculateB(gamma1);
+    A = calculateA(gamma1);
+    gamma = B * log(d) + A;
+
+end
+
+end
+
+
+function gamma1 = calculateGamma1(Zgo, ak)
+    
+    gamma1 = 4.2860 * 10^-4 * (Zgo - 500) + 0.
+
+end
+
+function B = calculateB(gamma1)
+
+    B = 
+    
+end
+
+function A = calculateA(gamma1)
 
 end
