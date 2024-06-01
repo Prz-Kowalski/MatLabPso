@@ -1,6 +1,9 @@
 clear
 clc
 
+
+
+
 Rr = 1300;
 G = 8.2*10^4;
 P = 1000;
@@ -22,7 +25,7 @@ deltaC = 1.0;
 
 number_of_particles = 1000;
 number_of_dimensions = N;
-number_of_iterations = 4000;
+number_of_iterations = 2000;
 inertia_coef = 0.5;
 cognitive_coef = 0.5;
 social_coef = 0.1;
@@ -39,7 +42,7 @@ social_coef = 0.1;
 % jej rozmiar jest więc wyznaczany wzorem sz = 3*d + 1
 
 
-
+fi = [1 4 7 10 13 16 19];
 swarm = zeros(number_of_particles, number_of_dimensions*3+1);
 valueI = number_of_dimensions*3+1;
 best_global_value = inf();
@@ -50,30 +53,35 @@ best_global_vector = zeros(1,number_of_dimensions);
 for i = 1 : number_of_particles
     for d = 1: number_of_dimensions
 
-        if d == 1
-            dimension = 1;
-        else
-            dimension = (d-1) *3;
-        end
+        di = fi(d);
 
         random_index = round( 1 + rand() * (L-1));
 
         %początkowa pozycja cząstki
-        swarm(i, dimension) = W(d,random_index);
+        swarm(i, di) = random_index;
         %początkowa najlepsza pozycja cząstki
-        swarm(i, dimension + 2) = W(d,random_index);
+        swarm(i, di + 2) = random_index;
         %początkowa prędkość cząstki = 0;
 
 
     end
-    
-    [fatigue, volume] = Model(swarm(i,1),swarm(i,4),swarm(i,7),swarm(i,10),swarm(i,13),swarm(i,15),swarm(i,18), P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin);
+
+
+    x1 = W(1, swarm(i,1));
+    x2 = W(2, swarm(i,4));
+    x3 = W(3, swarm(i,7));
+    x4 = W(4, swarm(i,10));
+    x5 = W(5, swarm(i,13));
+    x6 = W(6, swarm(i,16));
+    x7 = W(7, swarm(i,19));
+         
+        [fatigue, volume] = Model(x1,x2,x3,x4,x5,x6,x7, P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin);
     
     swarm(i, valueI) = fatigue;
 
     if fatigue < best_global_value
        best_global_value = fatigue;
-       best_global_vector = [swarm(i,1) swarm(i,4) swarm(i,7) swarm(i,10) swarm(i,13) swarm(i,15) swarm(i,18)];
+       best_global_vector = [swarm(i,1) swarm(i,4) swarm(i,7) swarm(i,10) swarm(i,13) swarm(i,16) swarm(i,19)];
     end   
 
 end
@@ -84,11 +92,7 @@ for iter = 1: number_of_iterations
     for i = 1 : number_of_particles
             for d = 1: number_of_dimensions
 
-                if d == 1
-                    di = 1;
-                else
-                    di = (d-1) *3;
-                end
+            di = fi(d);
             rp = rand();
             rg = rand();
             %       prędskość
@@ -96,14 +100,34 @@ for iter = 1: number_of_iterations
             %       pozycja
             swarm(i,di) = min(max(round(swarm(i,di) + swarm(i, di + 1)),1),L);
             end
-            
-        [fatigue, volume] = Model(swarm(i,1),swarm(i,4),swarm(i,7),swarm(i,10),swarm(i,13),swarm(i,15),swarm(i,18), P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin);
+    x1 = W(1, swarm(i,1));
+    x2 = W(2, swarm(i,4));
+    x3 = W(3, swarm(i,7));
+    x4 = W(4, swarm(i,10));
+    x5 = W(5, swarm(i,13));
+    x6 = W(6, swarm(i,16));
+    x7 = W(7, swarm(i,19));
+         
+        [fatigue, volume] = Model(x1,x2,x3,x4,x5,x6,x7, P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin);
     
-        swarm(i, valueI) = fatigue;
+        if fatigue < swarm(i, valueI)
+            swarm(i, valueI) = fatigue;
 
+            %aktaulizacja najlepszej 
+              for d = 1: number_of_dimensions
+
+                if d == 1
+                    di = 1;
+                else
+                    di = (d-1) *3;
+                end
+                    swarm(i, di+2) = swarm(i,di);
+              end
+        end
+    
         if fatigue < best_global_value
             best_global_value = fatigue;
-            best_global_vector = [swarm(i,1) swarm(i,4) swarm(i,7) swarm(i,10) swarm(i,13) swarm(i,15) swarm(i,18)];
+            best_global_vector = [swarm(i,1) swarm(i,4) swarm(i,7) swarm(i,10) swarm(i,13) swarm(i,16) swarm(i,19)];
         end   
         
     
@@ -115,3 +139,4 @@ end
 
 disp(best_global_vector);
 disp(best_global_value);
+
