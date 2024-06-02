@@ -1,4 +1,4 @@
-function [fatigue, volume] = Model(x1,x2,x3,x4,x5,x6,x7, P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin)
+function [fatigue, volume, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, G11, G12, G13, G14, G15, G16, G17] = Model(x1,x2,x3,x4,x5,x6,x7, P, G, Rr, r, c, deltaC, Dmax, Dmin, Lmax, Lmin)
 %FATIGUECRITERIUM Summary of this function goes here
 %   Detailed explanation goes here
 
